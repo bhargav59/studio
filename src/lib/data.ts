@@ -1,6 +1,6 @@
 import type { Tool, Review } from './types';
 
-export const trendingTools: Tool[] = [
+const tools: Tool[] = [
   {
     id: '1',
     name: 'Terraform',
@@ -53,11 +53,11 @@ export const trendingTools: Tool[] = [
   },
 ];
 
-const mockTool1 = trendingTools[0];
-const mockTool2 = trendingTools[1];
-const mockTool3 = trendingTools[2];
+const mockTool1 = tools[0];
+const mockTool2 = tools[1];
+const mockTool3 = tools[2];
 
-export const recentReviews: Review[] = [
+const initialReviews: Review[] = [
     {
         id: 'rev1',
         tool: mockTool1,
@@ -101,7 +101,7 @@ Terraform is an industry-standard for infrastructure provisioning. Its declarati
         tool: mockTool2,
         title: 'Is Kubernetes Still Worth the Complexity?',
         slug: 'kubernetes-complexity-review',
-        content: 'Kubernetes powers the modern cloud, but its learning curve is steep. This review breaks down when to choose K8s and when to look for simpler alternatives.',
+        content: '# Is Kubernetes Still Worth the Complexity?\n\nKubernetes powers the modern cloud, but its learning curve is steep. This review breaks down when to choose K8s and when to look for simpler alternatives. We\'ll explore its powerful features, common pitfalls, and the ecosystem of tools that has grown around it. We also compare its operational overhead to managed services like AWS Fargate, Google Cloud Run, and Azure Container Apps to help you make an informed decision for your next project.',
         rating: 4.7,
         author: 'Maria Garcia',
         published_date: 'June 22, 2024',
@@ -113,11 +113,41 @@ Terraform is an industry-standard for infrastructure provisioning. Its declarati
         tool: mockTool3,
         title: 'Monitoring with Prometheus: The Complete Guide',
         slug: 'prometheus-monitoring-guide',
-        content: 'From installation to advanced PromQL queries, our comprehensive guide covers everything you need to know to master monitoring with Prometheus and Grafana.',
+        content: '# Monitoring with Prometheus: The Complete Guide\n\nFrom installation and configuration to advanced PromQL queries and alert management, our comprehensive guide covers everything you need to know to master monitoring with Prometheus. We will walk through setting up exporters for common services, building insightful Grafana dashboards, and establishing a robust alerting pipeline with Alertmanager to ensure you never miss a critical incident.',
         rating: 4.8,
         author: 'Sam Chen',
         published_date: 'June 20, 2024',
         featured_image: 'https://picsum.photos/400/227',
         data_ai_hint: 'data dashboard',
     },
-]
+];
+
+// In-memory store for reviews. In a real app, this would be a database.
+let reviewsStore: Review[] = [...initialReviews];
+
+export function getRecentReviews(): Review[] {
+    return reviewsStore.slice().sort((a, b) => new Date(b.published_date).getTime() - new Date(a.published_date).getTime());
+}
+
+export function getReviewBySlug(slug: string): Review | undefined {
+    return reviewsStore.find(review => review.slug === slug);
+}
+
+export function addReview(review: Omit<Review, 'id' | 'slug' | 'published_date'>): Review {
+    const newId = `rev${reviewsStore.length + 1}`;
+    const newSlug = review.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+    
+    const newReview: Review = {
+        ...review,
+        id: newId,
+        slug: newSlug,
+        published_date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    };
+
+    reviewsStore = [newReview, ...reviewsStore];
+    return newReview;
+}
+
+export function getTrendingTools(): Tool[] {
+    return tools;
+}

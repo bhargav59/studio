@@ -1,19 +1,31 @@
+'use client';
+
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { recentReviews } from '@/lib/data';
+import { getRecentReviews, getReviewBySlug } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
+import { useEffect, useState } from 'react';
+import type { Review } from '@/lib/types';
 
-export function generateStaticParams() {
-  return recentReviews.map(review => ({
-    slug: review.slug,
-  }));
-}
 
 export default function ReviewPage({ params }: { params: { slug: string } }) {
-  const review = recentReviews.find(r => r.slug === params.slug);
+  const [review, setReview] = useState<Review | null | undefined>(null);
 
-  if (!review) {
+  useEffect(() => {
+    setReview(getReviewBySlug(params.slug));
+  }, [params.slug]);
+
+
+  if (review === null) {
+      return (
+        <div className="flex justify-center items-center h-64">
+            <p>Loading review...</p>
+        </div>
+      )
+  }
+
+  if (review === undefined) {
     notFound();
   }
 

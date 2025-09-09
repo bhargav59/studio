@@ -1,10 +1,13 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { recentReviews } from '@/lib/data';
+import { getRecentReviews } from '@/lib/data';
 
 export default function ReviewsPage() {
+    const reviews = getRecentReviews();
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -20,7 +23,7 @@ export default function ReviewsPage() {
       </header>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {recentReviews.map(review => (
+        {reviews.map(review => (
           <Card
             key={review.id}
             className="overflow-hidden hover:shadow-lg transition-shadow duration-300"
@@ -43,7 +46,7 @@ export default function ReviewsPage() {
                     {review.title}
                   </h3>
                   <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                    {review.content}
+                    A comprehensive review of {review.tool.name}.
                   </p>
                   <div className="flex items-center mt-4 text-xs text-muted-foreground">
                     <span>By {review.author}</span>

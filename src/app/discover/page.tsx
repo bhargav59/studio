@@ -4,25 +4,60 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { generateReviewFromTrendingTool, GenerateReviewFromTrendingToolOutput } from '@/ai/flows/generate-review-from-trending-tool';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Sparkles, CheckCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
+import { addReview } from '@/lib/data';
+import type { Review, Tool } from '@/lib/types';
+import { useRouter } from 'next/navigation';
 
 export default function DiscoverPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GenerateReviewFromTrendingToolOutput | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const router = useRouter();
 
   const handleGenerate = async () => {
     setLoading(true);
     setError(null);
     setResult(null);
+    setIsSaved(false);
+
     try {
       const response = await generateReviewFromTrendingTool({
         githubApiUrl: 'https://api.github.com/search/repositories?q=language:typescript+topic:devops&sort=stars&order=desc',
       });
       setResult(response);
+
+      // Automatically save the new review
+      const newReview = addReview({
+        tool: {
+          id: response.tool.toolName, // Simplified ID
+          name: response.tool.toolName,
+          description: response.tool.toolDescription,
+          category: response.tool.toolCategory as Tool['category'],
+          website_url: response.tool.websiteUrl || '',
+          github_url: response.tool.githubUrl,
+          popularity_score: 80, // Default value
+          trend: 10, // Default value
+        },
+        title: `${response.tool.toolName}: An AI-Generated Review`,
+        content: response.review.review,
+        rating: 4.5, // Default value
+        author: 'AI Analyst',
+        featured_image: `https://picsum.photos/seed/${response.tool.toolName}/400/225`,
+        data_ai_hint: 'tech abstract',
+      });
+
+      setIsSaved(true);
+
+      // Redirect to the new review page after a short delay
+      setTimeout(() => {
+        router.push(`/reviews/${newReview.slug}`);
+      }, 2000);
+
     } catch (e: any) {
       setError(e.message || 'An unexpected error occurred.');
     }
@@ -66,7 +101,15 @@ export default function DiscoverPage() {
         </Card>
       )}
 
-      {result && (
+      {isSaved && result && (
+        <div className="flex flex-col items-center justify-center h-[40vh] text-center border-dashed border-2 rounded-lg border-green-500 bg-green-500/10">
+            <CheckCircle className="w-16 h-16 mb-4 text-green-500" />
+            <h2 className="text-2xl font-bold tracking-tight font-headline">Review Generated & Saved!</h2>
+            <p className="text-muted-foreground mt-2">Redirecting you to the new post...</p>
+        </div>
+      )}
+
+      {result && !isSaved && (
         <Card>
           <CardHeader>
             <Badge variant="secondary" className="w-fit mb-2">
@@ -102,7 +145,7 @@ export default function DiscoverPage() {
         </div>
       )}
 
-       {loading && (
+       {loading && !isSaved && (
          <div className="flex flex-col items-center justify-center h-[40vh] text-center border-dashed border-2 rounded-lg">
             <Loader2 className="w-16 h-16 mb-4 text-muted-foreground animate-spin" />
             <h2 className="text-2xl font-bold tracking-tight font-headline">Generating...</h2>

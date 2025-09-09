@@ -32,7 +32,7 @@ export default function RootLayout({
             <SidebarContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <Link href="/" className="w-full">
+                  <Link href="/dashboard" className="w-full">
                     <SidebarMenuButton tooltip="Dashboard">
                       <LayoutDashboard />
                       <span>Dashboard</span>
