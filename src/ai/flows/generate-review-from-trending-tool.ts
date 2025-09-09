@@ -12,8 +12,8 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import {discoverTrendingTools, DiscoverTrendingToolsOutput} from './tool-discovery-github-monitoring';
-import {generateToolReview, GenerateToolReviewOutput} from './automated-tool-review-generation';
+import {discoverTrendingTools, type DiscoverTrendingToolsOutput} from './tool-discovery-github-monitoring';
+import {generateToolReview, type GenerateToolReviewOutput} from './automated-tool-review-generation';
 
 // Input schema for the review generation flow
 const GenerateReviewFromTrendingToolInputSchema = z.object({
@@ -24,8 +24,16 @@ export type GenerateReviewFromTrendingToolInput = z.infer<typeof GenerateReviewF
 
 // Output schema for the review generation flow
 const GenerateReviewFromTrendingToolOutputSchema = z.object({
-  tool: DiscoverTrendingToolsOutput,
-  review: GenerateToolReviewOutput,
+  tool: z.object({
+    toolName: z.string(),
+    toolDescription: z.string(),
+    toolCategory: z.string(),
+    githubUrl: z.string(),
+    websiteUrl: z.string().optional(),
+  }),
+  review: z.object({
+    review: z.string(),
+  }),
 });
 
 export type GenerateReviewFromTrendingToolOutput = z.infer<typeof GenerateReviewFromTrendingToolOutputSchema>;
@@ -50,10 +58,10 @@ const generateReviewFromTrendingToolFlow = ai.defineFlow(
   },
   async input => {
     // Step 1: Discover a trending tool
-    const trendingTool = await discoverTrendingTools({ githubApiUrl: input.githubApiUrl });
+    const trendingTool: DiscoverTrendingToolsOutput = await discoverTrendingTools({ githubApiUrl: input.githubApiUrl });
 
     // Step 2: Generate a review for the discovered tool
-    const review = await generateToolReview({
+    const review: GenerateToolReviewOutput = await generateToolReview({
         name: trendingTool.toolName,
         description: trendingTool.toolDescription,
         website_url: trendingTool.websiteUrl || 'https://github.com', // Provide a fallback URL

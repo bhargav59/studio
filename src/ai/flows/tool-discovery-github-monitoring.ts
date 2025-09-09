@@ -20,7 +20,7 @@ const ToolCategorySchema = z.enum([
   'CI/CD', 'Monitoring', 'Security', 'Networking', 'Database', 'DevOps', 'Cloud Engineering', 'Testing', 'Other'
 ]).describe('The category of the discovered tool.');
 
-const DiscoverTrendingToolsOutputSchema = z.object({
+export const DiscoverTrendingToolsOutputSchema = z.object({
   toolName: z.string().describe('The name of the discovered tool.'),
   toolDescription: z.string().describe('A brief description of the tool.'),
   toolCategory: ToolCategorySchema,
