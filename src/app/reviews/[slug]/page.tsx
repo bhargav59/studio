@@ -2,30 +2,16 @@
 
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { getRecentReviews, getReviewBySlug } from '@/lib/data';
+import { getReviewBySlug } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
-import { useEffect, useState } from 'react';
 import type { Review } from '@/lib/types';
 
 
 export default function ReviewPage({ params }: { params: { slug: string } }) {
-  const [review, setReview] = useState<Review | null | undefined>(null);
+  const review: Review | undefined = getReviewBySlug(params.slug);
 
-  useEffect(() => {
-    setReview(getReviewBySlug(params.slug));
-  }, [params.slug]);
-
-
-  if (review === null) {
-      return (
-        <div className="flex justify-center items-center h-64">
-            <p>Loading review...</p>
-        </div>
-      )
-  }
-
-  if (review === undefined) {
+  if (!review) {
     notFound();
   }
 
