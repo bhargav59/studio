@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'CloudWise',
+  title: 'CloudEngineered',
   description: 'AI-powered cloud engineering and DevOps tool reviews',
 };
 
@@ -31,7 +31,7 @@ export default function RootLayout({
             <SidebarHeader>
               <div className="flex items-center gap-2 p-2">
                 <Logo className="w-8 h-8" />
-                <h1 className="text-xl font-headline font-semibold">CloudWise</h1>
+                <h1 className="text-xl font-headline font-semibold">CloudEngineered</h1>
               </div>
             </SidebarHeader>
             <SidebarContent>
@@ -84,7 +84,7 @@ export default function RootLayout({
               <SidebarTrigger />
               <div className="flex items-center gap-2 mx-auto">
                 <Logo className="w-6 h-6" />
-                <h1 className="text-lg font-headline font-semibold">CloudWise</h1>
+                <h1 className="text-lg font-headline font-semibold">CloudEngineered</h1>
               </div>
             </div>
             <main className="p-4 sm:p-6 lg:p-8">
