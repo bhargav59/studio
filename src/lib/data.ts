@@ -77,7 +77,7 @@ Terraform works by using a declarative approach. You define the desired end stat
 - **Providers:** Plugins that interface with cloud providers' APIs (e.g., AWS, Azure, Google Cloud).
 - **State File:** A JSON file that keeps track of the resources Terraform manages, mapping them to real-world infrastructure.
 - **Modules:** Reusable containers for multiple resources that are used together, promoting organization and code reuse.
-- **Configuration Files:** Files written in HCL (`\'\'\'.tf\'\'\') where you declare your resources.
+- **Configuration Files:** Files written in HCL (\`.tf\`) where you declare your resources.
 
 # How do organizations use Terraform?
 - **Multi-Cloud Deployments:** Manage resources across different cloud providers with a single toolset.
