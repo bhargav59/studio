@@ -1,3 +1,4 @@
+
 import type { Tool, Review } from './types';
 
 const tools: Tool[] = [
@@ -113,7 +114,37 @@ Terraform is an industry-standard for infrastructure provisioning. Its declarati
         tool: mockTool3,
         title: 'Monitoring with Prometheus: The Complete Guide',
         slug: 'prometheus-monitoring-guide',
-        content: '# Monitoring with Prometheus: The Complete Guide\n\nFrom installation and configuration to advanced PromQL queries and alert management, our comprehensive guide covers everything you need to know to master monitoring with Prometheus. We will walk through setting up exporters for common services, building insightful Grafana dashboards, and establishing a robust alerting pipeline with Alertmanager to ensure you never miss a critical incident.',
+        content: `
+# What is Prometheus?
+Prometheus is an open-source monitoring and alerting toolkit originally built at SoundCloud. Since its inception in 2012, it has become a graduated project of the Cloud Native Computing Foundation (CNCF), joining projects like Kubernetes. Prometheus is designed for reliability and scalability, making it the de-facto standard for monitoring dynamic cloud-native environments. It solves the critical problem of observing the health and performance of services by collecting and storing time-series data.
+
+# How does Prometheus work?
+Prometheus operates on a pull-based model. The central Prometheus server scrapes metrics from configured endpoints (called "exporters") at regular intervals. These exporters are typically small services running alongside the application being monitored, exposing metrics in a simple text-based format. This architecture simplifies the client-side instrumentation and makes the monitoring system more resilient, as the Prometheus server controls the data collection process.
+
+# Key Components of Prometheus
+- **Prometheus Server:** The core of the system, which scrapes and stores time-series data.
+- **Exporters:** These are responsible for exposing metrics from third-party systems (like databases or hardware) or from your own applications. There are hundreds of official and community-built exporters available.
+- **Time-Series Database (TSDB):** Prometheus includes a highly efficient, local on-disk TSDB to store the collected metrics.
+- **PromQL:** A powerful and flexible query language that lets you select and aggregate time-series data in real time. It's one of Prometheus's most celebrated features.
+- **Alertmanager:** Handles alerts sent by client applications, such as the Prometheus server. It takes care of deduplicating, grouping, and routing them to the correct receiver integrations like email, PagerDuty, or Slack.
+- **Grafana:** While not a core component, Grafana is the most common tool used for visualizing Prometheus data, creating rich and interactive dashboards.
+
+# How do organizations use Prometheus?
+- **Microservices Monitoring:** Track the performance and error rates of individual services in a complex architecture.
+- **Kubernetes Monitoring:** With its dynamic service discovery, Prometheus is perfectly suited to monitor the ephemeral nature of containers and pods in Kubernetes.
+- **Infrastructure Monitoring:** Monitor CPU, memory, disk, and network usage across a fleet of servers.
+- **Alerting on SLOs/SLIs:** Define service level objectives (SLOs) and use PromQL to alert when service level indicators (SLIs) are not being met.
+
+# Prometheus vs. Datadog
+Prometheus is an open-source, self-hosted solution, giving teams complete control over their monitoring stack. Datadog is a SaaS-based, commercial product that offers a more managed, all-in-one experience.
+
+- **Cost:** Prometheus is free and open-source, but requires you to manage the infrastructure. Datadog's pricing is based on hosts, metrics, and data volume, which can become expensive at scale.
+- **Flexibility:** Prometheus offers immense flexibility and can be extended and customized to fit any need. Datadog is easier to set up but is less customizable.
+- **Data Model:** Prometheus's pull model and powerful PromQL give it a slight edge in querying and alerting for engineers, while Datadog provides a more user-friendly UI for a broader audience.
+
+# Conclusion
+Prometheus is an exceptionally powerful and reliable monitoring system, especially for cloud-native environments. Its strengths lie in its robust data model, flexible query language, and seamless integration with Kubernetes. While it requires more setup and maintenance than a SaaS solution like Datadog, the control, cost-effectiveness, and vibrant open-source community make it an invaluable tool for any engineering team serious about observability.
+`,
         rating: 4.8,
         author: 'Sam Chen',
         published_date: 'June 20, 2024',
