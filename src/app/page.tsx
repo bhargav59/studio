@@ -32,13 +32,17 @@ export default function Home() {
           <p className="text-muted-foreground">Welcome back! Here's your CloudEngineered overview.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline">
-            <Search className="mr-2" />
-            Discover
+          <Button variant="outline" asChild>
+            <Link href="/discover">
+              <Search className="mr-2" />
+              Discover
+            </Link>
           </Button>
-          <Button>
-            <PlusCircle className="mr-2" />
-            Generate Review
+          <Button asChild>
+            <Link href="/discover">
+              <PlusCircle className="mr-2" />
+              Generate Review
+            </Link>
           </Button>
         </div>
       </header>
