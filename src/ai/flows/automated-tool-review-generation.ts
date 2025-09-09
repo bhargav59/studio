@@ -26,7 +26,7 @@ export type GenerateToolReviewInput = z.infer<typeof GenerateToolReviewInputSche
 
 // Output schema for the tool review generation flow
 const GenerateToolReviewOutputSchema = z.object({
-  review: z.string().describe('A comprehensive review of the tool.'),
+  review: z.string().describe('A comprehensive, well-structured technical review of the tool in Markdown format.'),
 });
 
 export type GenerateToolReviewOutput = z.infer<typeof GenerateToolReviewOutputSchema>;
@@ -45,14 +45,44 @@ const automatedToolReviewPrompt = ai.definePrompt({
   name: 'automatedToolReviewPrompt',
   input: {schema: GenerateToolReviewInputSchema},
   output: {schema: GenerateToolReviewOutputSchema},
-  prompt: `You are an expert cloud engineering and DevOps tool reviewer. Generate a comprehensive review for the following tool, based on the provided information. The review should cover the tool's capabilities, features, use cases, and potential benefits. Focus on providing value to cloud engineers, DevOps professionals, and technical decision-makers.
+  prompt: `You are an expert technical writer and analyst specializing in cloud engineering and DevOps tools. Your task is to write a comprehensive, in-depth technical article reviewing the following tool.
 
 Tool Name: {{{name}}}
 Description: {{{description}}}
 Website URL: {{{website_url}}}
 GitHub URL: {{{github_url}}}
 
-Review:`,
+The article must be well-structured, written in Markdown, and provide deep insights for a technical audience (Cloud Engineers, DevOps Specialists, Solutions Architects).
+
+Please structure the article with the following sections, using Markdown headings:
+
+# What is {{{name}}}?
+- Provide a clear, concise definition of the tool.
+- Explain its primary purpose and the problem it solves.
+- Mention its creator or key maintainers if relevant (e.g., HashiCorp for Terraform).
+
+# How does {{{name}}} work?
+- Describe the core workflow or operational process of the tool.
+- Explain its underlying principles (e.g., declarative vs. procedural, agent vs. agentless).
+- Use a simple example to illustrate the process.
+
+# Key Components of {{{name}}}
+- Detail the main architectural components, features, or concepts of the tool.
+- For example, for Terraform, this would include configuration files, state files, providers, and modules. For a CI/CD tool, it might be pipelines, jobs, runners, and artifacts.
+
+# How do organizations use {{{name}}}?
+- Describe common, real-world use cases.
+- Examples: managing multi-cloud environments, application infrastructure management, self-service infrastructure, policy and compliance.
+
+# {{{name}}} vs. [A Major Competitor/Alternative]
+- Choose ONE major competitor or alternative tool (e.g., Terraform vs. Pulumi, Jenkins vs. GitHub Actions, Prometheus vs. Datadog).
+- Provide a balanced comparison, highlighting the key differences in philosophy, features, and use cases.
+
+# Conclusion
+- Summarize the key strengths and weaknesses of {{{name}}}.
+- Provide a final verdict on who the tool is best for and why it's a valuable addition to a tech stack.
+
+The entire output must be a single Markdown string.`,
 });
 
 // Flow definition for automated tool review generation

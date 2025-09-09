@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { generateReviewFromTrendingTool, GenerateReviewFromTrendingToolOutput } from '@/ai/flows/generate-review-from-trending-tool';
 import { Loader2, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
+import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 
 export default function DiscoverPage() {
@@ -87,11 +87,9 @@ export default function DiscoverPage() {
           </CardHeader>
           <CardContent>
             <h3 className="text-xl font-bold font-headline mb-4">Generated Review</h3>
-            <Textarea
-              readOnly
-              value={result.review.review}
-              className="h-96 text-base"
-            />
+            <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight">
+                <ReactMarkdown>{result.review.review}</ReactMarkdown>
+            </div>
           </CardContent>
         </Card>
       )}
